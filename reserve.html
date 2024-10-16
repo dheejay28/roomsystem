@@ -25,10 +25,10 @@
         <input type="text" id="year-section" required>
 
         <label for="start-time">Start Time:</label>
-        <input type="datetime-local" id="start-time" required>
+        <input type="time" id="start-time" required> <!-- Changed to time only -->
 
         <label for="end-time">End Time:</label>
-        <input type="datetime-local" id="end-time" required>
+        <input type="time" id="end-time" required> <!-- Changed to time only -->
 
         <button onclick="reserveRoom()">Reserve Room</button>
         <button onclick="window.location.href='index.html'">Back to Home</button>
@@ -57,7 +57,7 @@
             const endTime = document.getElementById('end-time').value;
 
             const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            const reservationCode = generateReservationCode(); // Implement this function as needed
+            const reservationCode = generateReservationCode(); // Generate reservation code
 
             reservations.push({
                 roomName,
@@ -70,7 +70,7 @@
             });
 
             localStorage.setItem('reservations', JSON.stringify(reservations)); // Save reservations
-            alert('Room reserved successfully!');
+            alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code
         }
 
         function generateReservationCode() {
