@@ -20,6 +20,7 @@
             background: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            overflow-x: auto; /* Enable horizontal scrolling if needed */
         }
 
         .logo {
@@ -43,6 +44,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            min-width: 600px; /* Set a minimum width to prevent table from being too small */
         }
 
         th, td {
@@ -83,19 +85,21 @@
         <h1>Reserved Rooms</h1>
         <div class="datetime" id="datetime"></div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Room Name</th>
-                    <th>Username</th>
-                    <th>Course</th>
-                    <th>Year/Section</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                </tr>
-            </thead>
-            <tbody id="reserved-rooms-list"></tbody>
-        </table>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Room Name</th>
+                        <th>Username</th>
+                        <th>Course</th>
+                        <th>Year/Section</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                    </tr>
+                </thead>
+                <tbody id="reserved-rooms-list"></tbody>
+            </table>
+        </div>
 
         <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
