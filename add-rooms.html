@@ -15,18 +15,64 @@
             <input type="text" id="room-name" required>
             <button type="submit" class="button">Add Room</button>
         </form>
+
+        <h2>Added Rooms</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="added-rooms">
+                <!-- Added rooms will be displayed here dynamically -->
+            </tbody>
+        </table>
     </div>
 
     <script>
+        function loadRooms() {
+            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
+            const tbody = document.getElementById('added-rooms');
+            tbody.innerHTML = ''; // Clear the table before populating
+
+            addedRooms.forEach(room => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${room}</td>
+                    <td><button class="remove-button" onclick="removeRoom('${room}')">Remove</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function removeRoom(roomName) {
+            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
+            const updatedRooms = addedRooms.filter(room => room !== roomName); // Remove the room
+            localStorage.setItem('addedRooms', JSON.stringify(updatedRooms)); // Update localStorage
+            loadRooms(); // Reload the room list
+        }
+
         document.getElementById('add-room-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent form submission
-            
-            const roomName = document.getElementById('room-name').value;
-            alert(`Room ${roomName} added successfully!`);
-            
-            // Here you would typically add logic to save the new room to your reservation system
-            document.getElementById('add-room-form').reset(); // Reset the form
+
+            const roomName = document.getElementById('room-name').value.trim();
+            let addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
+
+            // Check if the room already exists
+            if (addedRooms.includes(roomName)) {
+                alert('The room already exists.');
+            } else {
+                addedRooms.push(roomName); // Add the new room
+                localStorage.setItem('addedRooms', JSON.stringify(addedRooms)); // Save to localStorage
+                alert('Room added successfully!');
+                document.getElementById('room-name').value = ''; // Clear input field
+                loadRooms(); // Reload the room list
+            }
         });
+
+        // Load the rooms when the page loads
+        window.onload = loadRooms;
     </script>
 </body>
 </html>
