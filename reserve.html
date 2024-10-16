@@ -13,9 +13,7 @@
         <form id="reservation-form">
             <label for="room-select">Select Room:</label>
             <select id="room-select" required>
-                <option value="Room 101">Room 101</option>
-                <option value="Room 102">Room 102</option>
-                <!-- Add more room options as needed -->
+                <!-- Rooms will be loaded dynamically here -->
             </select>
             <label for="start-time">Start Time:</label>
             <input type="time" id="start-time" required>
@@ -30,6 +28,22 @@
     </div>
 
     <script>
+        function loadRooms() {
+            const roomSelect = document.getElementById('room-select');
+            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
+
+            // Clear the dropdown before loading rooms
+            roomSelect.innerHTML = '';
+
+            // Add rooms to the dropdown
+            addedRooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                roomSelect.appendChild(option);
+            });
+        }
+
         document.getElementById('reservation-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -61,10 +75,12 @@
                 reservedRooms.push(reservation);
                 localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms));
                 alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code
-                // Optionally, redirect to another page or clear the form
                 document.getElementById('reservation-form').reset(); // Reset form after reservation
             }
         });
+
+        // Load rooms when the page loads
+        window.onload = loadRooms;
     </script>
 </body>
 </html>
