@@ -39,31 +39,8 @@
             }
         }
 
-        // Function to dynamically populate reserved rooms (this is just an example)
-        function loadReservedRooms() {
-            // This data would typically come from a database or other data source
-            const reservedRoomsData = [
-                { room: "Room 101", startTime: "09:00 AM", endTime: "11:00 AM", course: "CS101", yearSection: "1A" },
-                { room: "Room 102", startTime: "01:00 PM", endTime: "03:00 PM", course: "ENG201", yearSection: "2B" }
-            ];
-
-            const tbody = document.getElementById("reserved-rooms");
-            reservedRoomsData.forEach(room => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${room.room}</td>
-                    <td>${room.startTime}</td>
-                    <td>${room.endTime}</td>
-                    <td>${room.course}</td>
-                    <td>${room.yearSection}</td>
-                    <td><button class="remove-button" onclick="removeRoom(this)">Remove</button></td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Load reserved rooms when the page is ready
-        window.onload = loadReservedRooms;
+        // Optionally, you can add a function here to dynamically load reserved rooms
+        // However, this example starts with an empty table
     </script>
 </body>
 </html>
