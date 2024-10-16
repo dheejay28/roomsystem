@@ -9,41 +9,30 @@
 <body>
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
-        <h1>Reserve Room</h1>
+        <h1>Reserve a Room</h1>
         <form id="reservation-form">
             <label for="room-select">Select Room:</label>
             <select id="room-select" required>
-                <!-- Rooms will be loaded dynamically here -->
+                <!-- Room options dynamically populated -->
             </select>
+
             <label for="start-time">Start Time:</label>
             <input type="time" id="start-time" required>
+
             <label for="end-time">End Time:</label>
             <input type="time" id="end-time" required>
+
             <label for="course">Course:</label>
             <input type="text" id="course" required>
+
             <label for="year-section">Year/Section:</label>
             <input type="text" id="year-section" required>
-            <button type="submit" class="button">Reserve Room</button>
+
+            <button type="submit">Reserve Room</button>
         </form>
     </div>
 
     <script>
-        function loadRooms() {
-            const roomSelect = document.getElementById('room-select');
-            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
-
-            // Clear the dropdown before loading rooms
-            roomSelect.innerHTML = '';
-
-            // Add rooms to the dropdown
-            addedRooms.forEach(room => {
-                const option = document.createElement('option');
-                option.value = room;
-                option.textContent = room;
-                roomSelect.appendChild(option);
-            });
-        }
-
         document.getElementById('reservation-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -52,7 +41,7 @@
             const endTime = document.getElementById('end-time').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
-            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate a reservation code
+            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate reservation code
 
             const reservation = {
                 room,
@@ -60,27 +49,17 @@
                 endTime,
                 course,
                 yearSection,
-                reservationCode // Include reservation code in the reservation object
+                reservationCode // Store the reservation code
             };
 
-            // Check if room is already reserved
+            // Retrieve existing reservations from localStorage or initialize an empty array
             const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
-            const isReserved = reservedRooms.some(res => res.room === room && 
-                ((startTime >= res.startTime && startTime < res.endTime) || 
-                (endTime > res.startTime && endTime <= res.endTime)));
+            reservedRooms.push(reservation); // Add the new reservation to the list
+            localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms)); // Save updated list to localStorage
 
-            if (isReserved) {
-                alert('The selected room is already booked during that time.');
-            } else {
-                reservedRooms.push(reservation);
-                localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms));
-                alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code
-                document.getElementById('reservation-form').reset(); // Reset form after reservation
-            }
+            alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code to the user
+            document.getElementById('reservation-form').reset(); // Reset form after reservation
         });
-
-        // Load rooms when the page loads
-        window.onload = loadRooms;
     </script>
 </body>
 </html>
