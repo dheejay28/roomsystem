@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve Room</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Reserve Room</h1>
+        <img src="logo.png" alt="Logo" class="logo">
+        <div id="time-date"></div>
+        <form id="reservation-form">
+            <label for="room">Select Room:</label>
+            <select id="room" required>
+                <option value="">Select Room</option>
+                <option value="Room 101">Room 101</option>
+                <option value="Room 102">Room 102</option>
+                <option value="Room 103">Room 103</option>
+            </select>
+            <label for="start-time">Start Time:</label>
+            <input type="time" id="start-time" required>
+            <label for="end-time">End Time:</label>
+            <input type="time" id="end-time" required>
+            <label for="course">Course:</label>
+            <input type="text" id="course" required>
+            <label for="year-section">Year/Section:</label>
+            <input type="text" id="year-section" required>
+            <button type="submit" class="button">Reserve</button>
+            <div id="reservation-code"></div>
+        </form>
+    </div>
+</body>
+</html>
