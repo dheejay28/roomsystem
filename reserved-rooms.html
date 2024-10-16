@@ -21,11 +21,12 @@
                     <th>Year/Section</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Admin Actions</th>
                 </tr>
             </thead>
             <tbody id="reserved-rooms-list"></tbody>
         </table>
+
+        <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
 
     <script>
@@ -34,32 +35,23 @@
             const reservedRoomsList = document.getElementById('reserved-rooms-list');
             reservedRoomsList.innerHTML = '';
 
-            reservations.forEach((reservation, index) => {
+            reservations.forEach((reservation) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${reservation.roomName}</td>
-                    <td>${reservation.username}</td>  <!-- Display the username -->
-                    <td>${reservation.course}</td>
-                    <td>${reservation.yearSection}</td>
+                    <td>${reservation.username}</td>
+                    <td>${reservation.course || 'N/A'}</td>
+                    <td>${reservation.yearSection || 'N/A'}</td>
                     <td>${reservation.startTime}</td>
                     <td>${reservation.endTime}</td>
-                    <td>
-                        <button onclick="removeReservation(${index})">Remove</button>
-                    </td>
                 `;
                 reservedRoomsList.appendChild(row);
             });
         }
 
-        function removeReservation(index) {
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            reservations.splice(index, 1); // Remove the reserved room
-            localStorage.setItem('reservations', JSON.stringify(reservations)); // Update localStorage
-            loadReservedRooms(); // Refresh the displayed list
-        }
-
+        // Display current date and time
         window.onload = function() {
-            loadReservedRooms();
+            loadReservedRooms(); // Load reserved rooms on page load
             const now = new Date();
             document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
         };
