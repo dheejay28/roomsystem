@@ -38,7 +38,7 @@
             const endTime = document.getElementById('end-time').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
-            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate a simple reservation code
+            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate a reservation code
 
             const reservation = {
                 room,
@@ -46,7 +46,7 @@
                 endTime,
                 course,
                 yearSection,
-                reservationCode
+                reservationCode // Include reservation code in the reservation object
             };
 
             // Check if room is already reserved
@@ -60,8 +60,9 @@
             } else {
                 reservedRooms.push(reservation);
                 localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms));
-                alert('Room reserved successfully! Your reservation code is: ' + reservationCode);
+                alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code
                 // Optionally, redirect to another page or clear the form
+                document.getElementById('reservation-form').reset(); // Reset form after reservation
             }
         });
     </script>
