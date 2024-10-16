@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserve a Room</title>
-    <link rel="stylesheet" href="rsv.css"> <!-- Your provided CSS file -->
+    <title>Reserve Room</title>
+    <link rel="stylesheet" href="rsv.css">
 </head>
 <body>
     <div class="container">
@@ -12,95 +12,73 @@
         <h1>Reserve a Room</h1>
         <div class="datetime" id="datetime"></div>
 
-        <form id="reservation-form">
-            <label for="room-select">Select Room:</label>
-            <select id="room-select" required>
-                <option value="">--Choose a Room--</option>
-                <!-- Rooms will be populated here -->
-            </select>
+        <label for="room-name">Select Room:</label>
+        <select id="room-name"></select>
 
-            <label for="username">Your Name:</label>
-            <input type="text" id="username" required>
+        <label for="username">Your Name:</label>
+        <input type="text" id="username" required>
 
-            <label for="course">Course:</label>
-            <input type="text" id="course">
+        <label for="course">Course:</label>
+        <input type="text" id="course" required>
 
-            <label for="year-section">Year/Section:</label>
-            <input type="text" id="year-section">
+        <label for="year-section">Year/Section:</label>
+        <input type="text" id="year-section" required>
 
-            <label for="start-time">Start Time:</label>
-            <input type="time" id="start-time" required>
+        <label for="start-time">Start Time:</label>
+        <input type="datetime-local" id="start-time" required>
 
-            <label for="end-time">End Time:</label>
-            <input type="time" id="end-time" required>
+        <label for="end-time">End Time:</label>
+        <input type="datetime-local" id="end-time" required>
 
-            <button type="submit">Reserve Room</button>
-        </form>
-
+        <button onclick="reserveRoom()">Reserve Room</button>
         <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
 
     <script>
-        // Load available rooms from local storage
         function loadRooms() {
-            const rooms = JSON.parse(localStorage.getItem('rooms')) || []; // Get rooms from localStorage
-            const roomSelect = document.getElementById('room-select');
+            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            const roomSelect = document.getElementById('room-name');
+            roomSelect.innerHTML = ''; // Clear any existing options
 
-            // Clear existing options
-            roomSelect.innerHTML = '<option value="">--Choose a Room--</option>';
-
-            // Populate dropdown with rooms
             rooms.forEach(room => {
                 const option = document.createElement('option');
-                option.value = room.roomName; // Use room name as value
-                option.textContent = room.roomName; // Display room name in dropdown
-                roomSelect.appendChild(option);
+                option.value = room; // Value for the selected option
+                option.textContent = room; // Display text for the option
+                roomSelect.appendChild(option); // Add option to the select element
             });
         }
 
-        // Generate a random reservation code
-        function generateReservationCode() {
-            return 'RES-' + Math.random().toString(36).substr(2, 9).toUpperCase(); // Generate a unique code
-        }
-
-        // Handle form submission
-        document.getElementById('reservation-form').addEventListener('submit', function(e) {
-            e.preventDefault(); // Prevent form submission
-
-            // Collect form data
+        function reserveRoom() {
             const username = document.getElementById('username').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
+            const roomName = document.getElementById('room-name').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
-            const selectedRoom = document.getElementById('room-select').value;
 
-            // Create reservation object with a unique reservation code
-            const reservation = {
-                reservationCode: generateReservationCode(), // Generate and include reservation code
-                roomName: selectedRoom,
+            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+            const reservationCode = generateReservationCode(); // Implement this function as needed
+
+            reservations.push({
+                roomName,
                 username,
                 course,
                 yearSection,
                 startTime,
-                endTime
-            };
+                endTime,
+                reservationCode
+            });
 
-            // Save reservation to local storage
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            reservations.push(reservation);
-            localStorage.setItem('reservations', JSON.stringify(reservations)); // Update reservations in local storage
+            localStorage.setItem('reservations', JSON.stringify(reservations)); // Save reservations
+            alert('Room reserved successfully!');
+        }
 
-            alert(`Room reserved successfully! Your reservation code is: ${reservation.reservationCode}`); // Notify user
+        function generateReservationCode() {
+            return Math.random().toString(36).substr(2, 9); // Simple random code generator
+        }
 
-            // Reset form
-            document.getElementById('reservation-form').reset();
-            loadRooms(); // Reload rooms to ensure no duplicates
-        });
-
-        // Display current date and time
         window.onload = function() {
-            loadRooms(); // Load rooms on page load
+            loadRooms(); // Load rooms when the page loads
             const now = new Date();
             document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
         };
