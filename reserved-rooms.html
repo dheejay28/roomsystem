@@ -50,9 +50,9 @@
             reservedRooms.forEach((room) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${room.roomName}</td>
-                    <td>${room.course}</td>
-                    <td>${room.yearSection}</td>
+                    <td>${room.roomName || 'N/A'}</td>
+                    <td>${room.course || 'N/A'}</td>
+                    <td>${room.yearSection || 'N/A'}</td>
                     <td>${room.startTime} - ${room.endTime}</td>
                 `;
                 reservedRoomsList.appendChild(row);
