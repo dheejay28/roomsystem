@@ -13,6 +13,9 @@
         <div id="datetime" class="datetime"></div> <!-- Display for Date and Time -->
 
         <form id="reserve-room-form">
+            <label for="user-name">User Name:</label>
+            <input type="text" id="user-name" required>
+
             <label for="room-select">Select Room:</label>
             <select id="room-select" required>
                 <option value="">-- Choose a Room --</option>
@@ -68,6 +71,7 @@
         document.getElementById('reserve-room-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
+            const userName = document.getElementById('user-name').value.trim(); // Get user name
             const roomName = document.getElementById('room-select').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
@@ -75,7 +79,7 @@
             const yearSection = document.getElementById('year-section').value.trim();
             const reservationCode = Math.random().toString(36).substring(2, 8); // Generate a simple reservation code
 
-            if (roomName && startTime && endTime && course && yearSection) {
+            if (userName && roomName && startTime && endTime && course && yearSection) {
                 const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
                 const isRoomReserved = reservations.some(reservation => 
                     reservation.roomName === roomName && 
@@ -88,6 +92,7 @@
                 } else {
                     // Save the reservation
                     reservations.push({
+                        userName, // Include the user name in the reservation
                         roomName,
                         course,
                         yearSection,
