@@ -18,6 +18,7 @@
                     <th>End Time</th>
                     <th>Course</th>
                     <th>Year/Section</th>
+                    <th>Reservation Code</th> <!-- New column for reservation code -->
                     <th>Action</th>
                 </tr>
             </thead>
@@ -52,6 +53,7 @@
                     <td>${room.endTime}</td>
                     <td>${room.course}</td>
                     <td>${room.yearSection}</td>
+                    <td>${room.reservationCode}</td> <!-- Display reservation code -->
                     <td><button class="remove-button" onclick="removeRoom(this)">Remove</button></td>
                 `;
                 tbody.appendChild(row);
