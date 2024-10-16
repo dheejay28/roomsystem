@@ -1,0 +1,44 @@
+/* Login Page Specific Styles */
+.login-container {
+    max-width: 400px; /* Set a maximum width for the login container */
+    margin: 80px auto; /* Centered with space at the top */
+    padding: 20px; /* Padding around the content */
+    background-color: white; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    text-align: center; /* Center align text */
+}
+
+/* Logo Style for Login Page */
+.login-logo {
+    max-width: 100px; /* Set a smaller size for the logo */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 20px; /* Space below the logo */
+}
+
+/* Input Styles for Login Form */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: 100%; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    margin: 10px 0; /* Space above and below inputs */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 5px; /* Rounded corners */
+}
+
+/* Button Styles for Login */
+.login-container button {
+    background-color: #007bff; /* Blue button */
+    color: white; /* White text */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding inside the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    margin: 10px 0; /* Space above and below buttons */
+    width: 100%; /* Full width for buttons */
+}
+
+/* Button Hover Effects */
+.login-container button:hover {
+    background-color: darkblue; /* Darker blue on hover */
+}
