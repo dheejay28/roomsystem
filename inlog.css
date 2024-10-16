@@ -1,44 +1,56 @@
-
-.login-container {
-    max-width: 400px; /* Set a maximum width for the login container */
-    margin: 80px auto; /* Centered with space at the top */
-    padding: 20px; /* Padding around the content */
-    background-color: white; /* White background for the form */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    text-align: center; /* Center align text */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Light gray background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-/* Logo Style for Login Page */
-.login-logo {
-    max-width: 100px; /* Set a smaller size for the logo */
-    height: auto; /* Maintain aspect ratio */
-    margin-bottom: 20px; /* Space below the logo */
+.container {
+    background-color: white; /* White background for the container */
+    padding: 20px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 300px; /* Fixed width for container */
+    text-align: center;
 }
 
-/* Input Styles for Login Form */
-.login-container input[type="text"],
-.login-container input[type="password"] {
-    width: 100%; /* Full width for inputs */
-    padding: 10px; /* Padding inside inputs */
-    margin: 10px 0; /* Space above and below inputs */
-    border: 1px solid #ccc; /* Light grey border */
+.logo {
+    width: 100px; /* Adjust logo size */
+    margin-bottom: 20px; /* Spacing below logo */
+}
+
+h1 {
+    margin-bottom: 20px; /* Spacing below heading */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px; /* Spacing below label */
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Padding inside input fields */
+    margin-bottom: 15px; /* Spacing below input fields */
+    border: 1px solid #ccc; /* Light gray border */
     border-radius: 5px; /* Rounded corners */
 }
 
-/* Button Styles for Login */
-.login-container button {
-    background-color: #007bff; /* Blue button */
+button {
+    width: 100%; /* Full width for buttons */
+    padding: 10px; /* Padding inside buttons */
+    margin: 5px 0; /* Spacing above and below buttons */
+    background-color: #007BFF; /* Bootstrap primary color */
     color: white; /* White text */
     border: none; /* No border */
-    padding: 10px 15px; /* Padding inside the button */
-    cursor: pointer; /* Pointer cursor on hover */
     border-radius: 5px; /* Rounded corners */
-    margin: 10px 0; /* Space above and below buttons */
-    width: 100%; /* Full width for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
 }
 
-/* Button Hover Effects */
-.login-container button:hover {
-    background-color: darkblue; /* Darker blue on hover */
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
