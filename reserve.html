@@ -13,7 +13,7 @@
         <form id="reservation-form">
             <label for="room-select">Select Room:</label>
             <select id="room-select" required>
-                <!-- Room options dynamically populated -->
+                <!-- Rooms will be dynamically populated here -->
             </select>
 
             <label for="start-time">Start Time:</label>
@@ -33,6 +33,31 @@
     </div>
 
     <script>
+        // Function to load available rooms from localStorage
+        function loadAvailableRooms() {
+            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            const roomSelect = document.getElementById('room-select');
+
+            // Clear the dropdown before populating it
+            roomSelect.innerHTML = '';
+
+            // Populate the dropdown with the available rooms
+            rooms.forEach(room => {
+                const option = document.createElement('option');
+                option.value = room;
+                option.textContent = room;
+                roomSelect.appendChild(option);
+            });
+
+            // If no rooms are available, disable the form
+            if (rooms.length === 0) {
+                const noRoomsOption = document.createElement('option');
+                noRoomsOption.textContent = 'No rooms available';
+                noRoomsOption.disabled = true;
+                roomSelect.appendChild(noRoomsOption);
+            }
+        }
+
         document.getElementById('reservation-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
@@ -60,6 +85,9 @@
             alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code to the user
             document.getElementById('reservation-form').reset(); // Reset form after reservation
         });
+
+        // Load available rooms when the page is ready
+        window.onload = loadAvailableRooms;
     </script>
 </body>
 </html>
