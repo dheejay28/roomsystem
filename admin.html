@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="inlog.css"> <!-- Updated to your new CSS file -->
 </head>
 <body>
     <div class="container">
-        <img src="logo.png" alt="Logo" class="logo">
+        <img src="logo.png" alt="Logo" class="logo" style="width: 100px; height: auto;"> <!-- Adjusted logo size -->
         <h1>Admin Dashboard</h1>
         <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
 
@@ -17,11 +17,6 @@
             <button onclick="window.location.href='add-room.html'">Add Room</button>
             <button onclick="window.location.href='ad-remove.html'">View Reserved Rooms</button>
             <button id="logout-btn">Log Out</button>
-        </div>
-
-        <div id="reserved-rooms-list-container">
-            <h2>Reserved Rooms</h2>
-            <ul id="reserved-rooms-list"></ul>
         </div>
     </div>
 
@@ -40,28 +35,15 @@
             document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
         }
 
-        function loadReservedRooms() {
-            const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
-            const reservedRoomsList = document.getElementById('reserved-rooms-list');
-            reservedRoomsList.innerHTML = ''; // Clear existing list
-
-            reservedRooms.forEach((room) => {
-                const li = document.createElement('li');
-                li.textContent = `Room: ${room.roomName}, Course: ${room.course}, Year/Section: ${room.yearSection}, Time: ${room.startTime} - ${room.endTime}`;
-                reservedRoomsList.appendChild(li);
-            });
-        }
-
         document.getElementById('logout-btn').addEventListener('click', function() {
             // Logic for logging out
             alert("You have logged out.");
             window.location.href = 'login.html'; // Redirect to login page
         });
 
-        // Load reserved rooms and date/time when the page is ready
+        // Load date/time when the page is ready
         window.onload = function() {
             updateDateTime();
-            loadReservedRooms();
             setInterval(updateDateTime, 1000); // Update every second
         };
     </script>
