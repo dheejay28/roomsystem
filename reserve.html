@@ -25,10 +25,10 @@
         <input type="text" id="year-section" required>
 
         <label for="start-time">Start Time:</label>
-        <input type="time" id="start-time" required> <!-- Changed to time only -->
+        <input type="datetime-local" id="start-time" required>
 
         <label for="end-time">End Time:</label>
-        <input type="time" id="end-time" required> <!-- Changed to time only -->
+        <input type="datetime-local" id="end-time" required>
 
         <button onclick="reserveRoom()">Reserve Room</button>
         <button onclick="window.location.href='index.html'">Back to Home</button>
@@ -53,24 +53,42 @@
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
             const roomName = document.getElementById('room-name').value;
-            const startTime = document.getElementById('start-time').value;
-            const endTime = document.getElementById('end-time').value;
+            const startTime = new Date(document.getElementById('start-time').value);
+            const endTime = new Date(document.getElementById('end-time').value);
 
             const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            const reservationCode = generateReservationCode(); // Generate reservation code
+            
+            // Check for overlapping reservations
+            const isConflict = reservations.some(reservation => {
+                const existingStartTime = new Date(reservation.startTime);
+                const existingEndTime = new Date(reservation.endTime);
+                return (
+                    reservation.roomName === roomName &&
+                    ((startTime >= existingStartTime && startTime < existingEndTime) ||
+                    (endTime > existingStartTime && endTime <= existingEndTime) ||
+                    (startTime <= existingStartTime && endTime >= existingEndTime))
+                );
+            });
+
+            if (isConflict) {
+                alert('The selected room is not available at this time. Please choose a different time.');
+                return; // Exit the function if there is a conflict
+            }
+
+            const reservationCode = generateReservationCode(); // Generate the reservation code
 
             reservations.push({
                 roomName,
                 username,
                 course,
                 yearSection,
-                startTime,
-                endTime,
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString(),
                 reservationCode
             });
 
             localStorage.setItem('reservations', JSON.stringify(reservations)); // Save reservations
-            alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code
+            alert('Room reserved successfully! Your reservation code is: ' + reservationCode);
         }
 
         function generateReservationCode() {
