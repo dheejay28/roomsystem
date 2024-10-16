@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Remove Reserved Room</title>
+    <title>Admin - Remove Reserved Rooms</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <img src="logo.png" alt="Logo" class="logo">
+        <img src="logo.png" alt="Logo" class="logo" style="width: 150px; height: auto;">
         <h1>Admin: Remove Reserved Rooms</h1>
         <div class="datetime" id="datetime"></div>
 
@@ -27,7 +27,7 @@
             <tbody id="reserved-rooms-list"></tbody>
         </table>
 
-        <button onclick="window.location.href='admin.html'">Back to Admin Page</button>
+        <button onclick="window.location.href='index.html'">Back to Home</button>
     </div>
 
     <script>
@@ -45,32 +45,25 @@
                     <td>${reservation.yearSection || 'N/A'}</td>
                     <td>${reservation.startTime}</td>
                     <td>${reservation.endTime}</td>
-                    <td><button onclick="removeReservation(${index})">Remove</button></td>
+                    <td><button onclick="removeRoom(${index})">Remove</button></td>
                 `;
                 reservedRoomsList.appendChild(row);
             });
         }
 
-        function removeReservation(index) {
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            reservations.splice(index, 1); // Remove the reserved room
+        function removeRoom(index) {
+            let reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+            reservations.splice(index, 1); // Remove the reservation at the given index
             localStorage.setItem('reservations', JSON.stringify(reservations)); // Update localStorage
-            loadReservedRooms(); // Refresh the displayed list
+            loadReservedRooms(); // Refresh the list
+            alert('Room reservation removed successfully!'); // Alert user
         }
 
-        function isAdmin() {
-            return localStorage.getItem('isAdmin') === 'true'; // Check if the user is admin
-        }
-
+        // Display current date and time
         window.onload = function() {
-            if (!isAdmin()) {
-                alert('You are not authorized to access this page.');
-                window.location.href = 'login.html'; // Redirect to login if not admin
-            } else {
-                loadReservedRooms();
-                const now = new Date();
-                document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
-            }
+            loadReservedRooms(); // Load reserved rooms on page load
+            const now = new Date();
+            document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
         };
     </script>
 </body>
