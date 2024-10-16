@@ -1,37 +1,37 @@
-/* styles.css */
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
 .container {
-    max-width: 400px;
-    margin: 50px auto; /* Center the container */
-    background: white;
-    padding: 20px;
+    background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
 }
 
 .logo {
     display: block;
     margin: 0 auto 20px;
-    width: 100px; /* Adjust the width as needed */
-    height: auto; /* Maintain the aspect ratio */
+    max-width: 100px; /* Adjust the size of the logo */
 }
 
 h1 {
     text-align: center;
-}
-
-.datetime {
-    text-align: center;
-    font-size: 16px;
-    margin: 10px 0;
-    color: #555; /* Color for the date and time text */
+    margin-bottom: 20px;
 }
 
 label {
@@ -39,26 +39,41 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"], input[type="password"] {
+input[type="text"],
+input[type="time"],
+select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
 button {
-    background-color: #007bff; /* Blue color */
-    color: white;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Blue color for buttons */
+    color: #fff;
     border: none;
     border-radius: 4px;
-    padding: 10px 15px;
     cursor: pointer;
     font-size: 16px;
-    width: 100%; /* Full-width buttons */
-    margin-top: 10px; /* Add some space above the button */
 }
 
 button:hover {
     background-color: #0056b3; /* Darker blue on hover */
+}
+
+.reservation-code {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+    color: #007bff; /* Match button color */
+}
+
+.datetime {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
 }
