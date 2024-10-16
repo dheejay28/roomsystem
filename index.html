@@ -9,10 +9,9 @@
 <body>
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
-        <h1>Room Reservation System</h1>
-        
+        <h1>Welcome to Room Reservation System</h1>
         <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
-
+        
         <button onclick="window.location.href='reserve.html'">Reserve Room</button>
         <button onclick="window.location.href='return.html'">Return Room</button>
         <button onclick="window.location.href='reserved-rooms.html'">View Reserved Rooms</button>
@@ -33,10 +32,12 @@
             };
             document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
         }
-        
-        setInterval(updateDateTime, 1000); // Update every second
-        updateDateTime(); // Initial call to display immediately
+
+        // Load the date and time when the page is ready
+        window.onload = function() {
+            updateDateTime();
+            setInterval(updateDateTime, 1000); // Update every second
+        };
     </script>
 </body>
 </html>
-
