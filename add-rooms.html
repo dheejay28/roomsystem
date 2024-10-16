@@ -3,75 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Rooms</title>
+    <title>Admin - Add Room</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
-        <h1>Add Room</h1>
+        <h1>Admin: Manage Rooms</h1>
         <form id="add-room-form">
             <label for="room-name">Room Name:</label>
             <input type="text" id="room-name" required>
-            <button type="submit" class="button">Add Room</button>
+            <button type="submit">Add Room</button>
         </form>
 
         <h2>Added Rooms</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Room Name</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="added-rooms">
-                <!-- Added rooms will be displayed here dynamically -->
-            </tbody>
-        </table>
+        <ul id="room-list"></ul>
     </div>
 
     <script>
         function loadRooms() {
-            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
-            const tbody = document.getElementById('added-rooms');
-            tbody.innerHTML = ''; // Clear the table before populating
+            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            const roomList = document.getElementById('room-list');
 
-            addedRooms.forEach(room => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${room}</td>
-                    <td><button class="remove-button" onclick="removeRoom('${room}')">Remove</button></td>
-                `;
-                tbody.appendChild(row);
+            // Clear the list before displaying rooms
+            roomList.innerHTML = '';
+
+            // Display all rooms in the list
+            rooms.forEach((room, index) => {
+                const li = document.createElement('li');
+                li.textContent = room;
+                roomList.appendChild(li);
             });
         }
 
-        function removeRoom(roomName) {
-            const addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
-            const updatedRooms = addedRooms.filter(room => room !== roomName); // Remove the room
-            localStorage.setItem('addedRooms', JSON.stringify(updatedRooms)); // Update localStorage
-            loadRooms(); // Reload the room list
-        }
-
         document.getElementById('add-room-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault(); // Prevent default form submission
 
             const roomName = document.getElementById('room-name').value.trim();
-            let addedRooms = JSON.parse(localStorage.getItem('addedRooms')) || [];
 
-            // Check if the room already exists
-            if (addedRooms.includes(roomName)) {
-                alert('The room already exists.');
-            } else {
-                addedRooms.push(roomName); // Add the new room
-                localStorage.setItem('addedRooms', JSON.stringify(addedRooms)); // Save to localStorage
-                alert('Room added successfully!');
-                document.getElementById('room-name').value = ''; // Clear input field
-                loadRooms(); // Reload the room list
+            if (roomName) {
+                let rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+
+                // Check if the room already exists
+                if (rooms.includes(roomName)) {
+                    alert('Room already exists!');
+                } else {
+                    // Add the room to the list
+                    rooms.push(roomName);
+                    localStorage.setItem('rooms', JSON.stringify(rooms)); // Store updated rooms in localStorage
+                    alert('Room added successfully!');
+                    loadRooms(); // Refresh the list
+                }
+
+                // Reset the form after adding a room
+                document.getElementById('add-room-form').reset();
             }
         });
 
-        // Load the rooms when the page loads
+        // Load rooms when the page is ready
         window.onload = loadRooms;
     </script>
 </body>
