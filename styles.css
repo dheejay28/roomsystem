@@ -4,12 +4,12 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 20px;
+    padding: 0;
 }
 
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 400px;
+    margin: 50px auto; /* Center the container */
     background: white;
     padding: 20px;
     border-radius: 8px;
@@ -19,12 +19,19 @@ body {
 .logo {
     display: block;
     margin: 0 auto 20px;
-    width: 150px; /* Adjust this value for a smaller logo */
-    height: auto; /* Maintains the aspect ratio */
+    width: 100px; /* Adjust the width as needed */
+    height: auto; /* Maintain the aspect ratio */
 }
 
-h1, h2 {
+h1 {
     text-align: center;
+}
+
+.datetime {
+    text-align: center;
+    font-size: 16px;
+    margin: 10px 0;
+    color: #555; /* Color for the date and time text */
 }
 
 label {
@@ -32,7 +39,7 @@ label {
     margin-bottom: 5px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -48,24 +55,10 @@ button {
     padding: 10px 15px;
     cursor: pointer;
     font-size: 16px;
+    width: 100%; /* Full-width buttons */
     margin-top: 10px; /* Add some space above the button */
 }
 
 button:hover {
     background-color: #0056b3; /* Darker blue on hover */
-}
-
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
