@@ -10,23 +10,31 @@
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
         <h1>Reserve a Room</h1>
-        <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
+        <div id="datetime" class="datetime"></div> <!-- Display for Date and Time -->
 
         <form id="reserve-room-form">
             <label for="room-select">Select Room:</label>
-            <select id="room-select" required></select>
-            <label for="course">Course:</label>
-            <input type="text" id="course" required>
-            <label for="year-section">Year/Section:</label>
-            <input type="text" id="year-section" required>
+            <select id="room-select" required>
+                <option value="">-- Choose a Room --</option>
+                <!-- Rooms will be populated here -->
+            </select>
+
             <label for="start-time">Start Time:</label>
             <input type="time" id="start-time" required>
+
             <label for="end-time">End Time:</label>
             <input type="time" id="end-time" required>
+
+            <label for="course">Course:</label>
+            <input type="text" id="course" required>
+
+            <label for="year-section">Year/Section:</label>
+            <input type="text" id="year-section" required>
+
             <button type="submit">Reserve Room</button>
         </form>
 
-        <div id="reservation-code" style="display:none;"></div>
+        <div id="reservation-code" class="reservation-code"></div> <!-- Display reservation code here -->
     </div>
 
     <script>
@@ -47,11 +55,8 @@
         function loadRooms() {
             const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
             const roomSelect = document.getElementById('room-select');
+            roomSelect.innerHTML = '<option value="">-- Choose a Room --</option>'; // Clear existing options
 
-            // Clear existing options
-            roomSelect.innerHTML = '';
-
-            // Add room options to the dropdown
             rooms.forEach(room => {
                 const option = document.createElement('option');
                 option.value = room;
@@ -64,37 +69,40 @@
             event.preventDefault(); // Prevent default form submission
 
             const roomName = document.getElementById('room-select').value;
-            const course = document.getElementById('course').value;
-            const yearSection = document.getElementById('year-section').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
+            const course = document.getElementById('course').value.trim();
+            const yearSection = document.getElementById('year-section').value.trim();
+            const reservationCode = Math.random().toString(36).substring(2, 8); // Generate a simple reservation code
 
-            // Generate a reservation code
-            const reservationCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+            if (roomName && startTime && endTime && course && yearSection) {
+                const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+                const isRoomReserved = reservations.some(reservation => 
+                    reservation.roomName === roomName && 
+                    reservation.startTime < endTime && 
+                    reservation.endTime > startTime
+                );
 
-            // Create a reservation object
-            const reservation = {
-                roomName,
-                course,
-                yearSection,
-                startTime,
-                endTime,
-                reservationCode
-            };
-
-            // Save to localStorage
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-            reservations.push(reservation);
-            localStorage.setItem('reservations', JSON.stringify(reservations));
-
-            // Show reservation code
-            const codeDisplay = document.getElementById('reservation-code');
-            codeDisplay.textContent = `Room reserved! Your reservation code is: ${reservationCode}`;
-            codeDisplay.style.display = 'block';
-
-            // Reset the form
-            document.getElementById('reserve-room-form').reset();
-            loadRooms(); // Refresh the room list
+                if (isRoomReserved) {
+                    alert('This room is already booked for the selected time.');
+                } else {
+                    // Save the reservation
+                    reservations.push({
+                        roomName,
+                        course,
+                        yearSection,
+                        startTime,
+                        endTime,
+                        reservationCode
+                    });
+                    localStorage.setItem('reservations', JSON.stringify(reservations)); // Update local storage
+                    document.getElementById('reservation-code').textContent = `Reservation Code: ${reservationCode}`; // Show reservation code
+                    this.reset(); // Reset form fields
+                    loadRooms(); // Reload rooms
+                }
+            } else {
+                alert('Please fill in all fields.');
+            }
         });
 
         // Load rooms and date/time when the page is ready
