@@ -66,7 +66,9 @@
             const endTime = document.getElementById('end-time').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
-            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate reservation code
+
+            // Generate reservation code
+            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); 
 
             const reservation = {
                 room,
@@ -82,7 +84,9 @@
             reservedRooms.push(reservation); // Add the new reservation to the list
             localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms)); // Save updated list to localStorage
 
-            alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); // Show reservation code to the user
+            // Show the reservation code to the user
+            alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`); 
+
             document.getElementById('reservation-form').reset(); // Reset form after reservation
         });
 
@@ -91,4 +95,3 @@
     </script>
 </body>
 </html>
-
