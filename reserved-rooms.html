@@ -19,6 +19,7 @@
                     <th>Course</th>
                     <th>Year/Section</th>
                     <th>Time</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="reserved-rooms-list">
@@ -47,16 +48,25 @@
             const reservedRoomsList = document.getElementById('reserved-rooms-list');
             reservedRoomsList.innerHTML = ''; // Clear existing list
 
-            reservedRooms.forEach((room) => {
+            reservedRooms.forEach((room, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${room.roomName || 'N/A'}</td>
                     <td>${room.course || 'N/A'}</td>
                     <td>${room.yearSection || 'N/A'}</td>
                     <td>${room.startTime} - ${room.endTime}</td>
+                    <td><button onclick="removeRoom(${index})">Remove</button></td>
                 `;
                 reservedRoomsList.appendChild(row);
             });
+        }
+
+        function removeRoom(index) {
+            const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
+            // Remove the room at the specified index
+            reservedRooms.splice(index, 1);
+            localStorage.setItem('reservations', JSON.stringify(reservedRooms)); // Update local storage
+            loadReservedRooms(); // Reload the list
         }
 
         // Load reserved rooms and date/time when the page is ready
