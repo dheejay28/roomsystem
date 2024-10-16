@@ -37,6 +37,8 @@ input, select {
     margin-bottom: 15px; /* Space below inputs */
     border: 1px solid #ccc; /* Border styling */
     border-radius: 5px; /* Rounded corners */
+    box-sizing: border-box; /* Include padding in width */
+    font-size: 16px; /* Font size for inputs */
 }
 
 button {
@@ -57,4 +59,19 @@ button:hover {
 .datetime {
     font-size: 14px; /* Smaller font for datetime */
     margin: 10px 0; /* Space above and below datetime */
+}
+
+/* Optional styles for better mobile responsiveness */
+@media (max-width: 400px) {
+    .container {
+        width: 90%; /* Full width on smaller screens */
+    }
+
+    h1 {
+        font-size: 22px; /* Slightly smaller title on mobile */
+    }
+
+    button {
+        font-size: 14px; /* Smaller buttons on mobile */
+    }
 }
