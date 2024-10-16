@@ -18,11 +18,11 @@
                     <th>End Time</th>
                     <th>Course</th>
                     <th>Year/Section</th>
-                    <th>Reservation Code</th> <!-- Show reservation code -->
+                    <!-- No reservation code displayed here -->
                 </tr>
             </thead>
             <tbody id="reserved-rooms">
-                <!-- Reserved rooms will be populated here dynamically -->
+                <!-- Reserved rooms will be dynamically populated here -->
             </tbody>
         </table>
     </div>
@@ -32,6 +32,9 @@
             const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
             const tbody = document.getElementById("reserved-rooms");
 
+            // Clear the table content before populating
+            tbody.innerHTML = '';
+
             reservedRooms.forEach(room => {
                 const row = document.createElement("tr");
                 row.innerHTML = `
@@ -40,7 +43,7 @@
                     <td>${room.endTime}</td>
                     <td>${room.course}</td>
                     <td>${room.yearSection}</td>
-                    <td>${room.reservationCode}</td> <!-- Display reservation code -->
+                    <!-- No reservation code here -->
                 `;
                 tbody.appendChild(row);
             });
