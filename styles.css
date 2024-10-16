@@ -18,7 +18,9 @@ body {
 
 .logo {
     display: block;
-    margin: 0 auto 10px;
+    margin: 0 auto 20px;
+    width: 150px; /* Adjust this value for a smaller logo */
+    height: auto; /* Maintains the aspect ratio */
 }
 
 h1, h2 {
