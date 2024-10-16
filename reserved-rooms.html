@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
         <h1>Reserved Rooms</h1>
         <table>
             <thead>
@@ -21,9 +22,34 @@
                 </tr>
             </thead>
             <tbody id="reserved-rooms">
-                <!-- Reserved rooms will be populated here -->
+                <!-- Sample reserved room data (you can replace this with your data handling) -->
+                <tr>
+                    <td>Room 101</td>
+                    <td>09:00 AM</td>
+                    <td>11:00 AM</td>
+                    <td>CS101</td>
+                    <td>1A</td>
+                    <td><button class="remove-button" onclick="removeRoom(this)">Remove</button></td>
+                </tr>
+                <tr>
+                    <td>Room 102</td>
+                    <td>01:00 PM</td>
+                    <td>03:00 PM</td>
+                    <td>ENG201</td>
+                    <td>2B</td>
+                    <td><button class="remove-button" onclick="removeRoom(this)">Remove</button></td>
+                </tr>
+                <!-- Additional rows can be populated dynamically -->
             </tbody>
         </table>
     </div>
+
+    <script>
+        function removeRoom(button) {
+            const row = button.parentElement.parentElement; // Get the parent row
+            row.remove(); // Remove the row from the table
+            alert('Reserved room removed successfully.');
+        }
+    </script>
 </body>
 </html>
