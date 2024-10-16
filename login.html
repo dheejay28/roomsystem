@@ -15,28 +15,24 @@
             <input type="text" id="username" required>
             <label for="password">Password:</label>
             <input type="password" id="password" required>
-            <button type="submit" class="button">Log In</button>
+            <button type="submit">Log In</button>
         </form>
+        <button onclick="window.location.href='index.html'">Home</button> <!-- Home Button -->
     </div>
 
     <script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
-            // Simulating login credentials (for demonstration purposes)
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Replace these with your actual admin credentials
-            const adminUsername = 'iamtheadmin';
-            const adminPassword = 'Dj*0100010001001010';
-
-            // Check credentials
-            if (username === adminUsername && password === adminPassword) {
-                alert('Login successful!');
-                window.location.href = 'admin.html'; // Redirect to admin page
+            // Simple login validation
+            if (username === 'iamtheadmin' && password === 'Dj*0100010001001010') {
+                // Redirect to admin.html if login is successful
+                window.location.href = 'admin.html';
             } else {
-                alert('Invalid username or password. Please try again.');
+                alert('Invalid credentials!'); // Show alert for invalid login
             }
         });
     </script>
