@@ -11,14 +11,20 @@
         <img src="logo.png" alt="Logo" class="logo">
         <h1>Reserved Rooms</h1>
         <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
-        
-        <ul id="reserved-rooms-list"></ul>
 
-        <div id="admin-controls" style="display: none;">
-            <h2>Admin Actions</h2>
-            <p>Only visible to admin users.</p>
-            <button id="remove-room-btn">Remove Selected Room</button>
-        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Course</th>
+                    <th>Year/Section</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody id="reserved-rooms-list">
+                <!-- Reserved rooms will be populated here -->
+            </tbody>
+        </table>
     </div>
 
     <script>
@@ -42,28 +48,18 @@
             reservedRoomsList.innerHTML = ''; // Clear existing list
 
             reservedRooms.forEach((room) => {
-                const li = document.createElement('li');
-                li.textContent = `Room: ${room.roomName}, Course: ${room.course}, Year/Section: ${room.yearSection}, Time: ${room.startTime} - ${room.endTime}`;
-                reservedRoomsList.appendChild(li);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${room.roomName}</td>
+                    <td>${room.course}</td>
+                    <td>${room.yearSection}</td>
+                    <td>${room.startTime} - ${room.endTime}</td>
+                `;
+                reservedRoomsList.appendChild(row);
             });
         }
 
-        // Admin controls logic (assuming admin login is handled)
-        const isAdmin = true; // Set this based on your actual admin login logic
-        if (isAdmin) {
-            document.getElementById('admin-controls').style.display = 'block';
-            document.getElementById('remove-room-btn').addEventListener('click', function() {
-                const roomName = prompt("Enter the name of the room to remove:");
-                const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
-
-                const updatedRooms = reservedRooms.filter(room => room.roomName !== roomName); // Remove room by name
-                localStorage.setItem('reservations', JSON.stringify(updatedRooms)); // Update localStorage
-                loadReservedRooms(); // Reload the list
-                alert("Room removed successfully!");
-            });
-        }
-
-        // Load reserved rooms when the page is ready
+        // Load reserved rooms and date/time when the page is ready
         window.onload = function() {
             updateDateTime();
             loadReservedRooms();
