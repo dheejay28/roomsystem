@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reserve Room</title>
+    <title>Reserve a Room</title>
     <link rel="stylesheet" href="rsv.css">
 </head>
 <body>
@@ -12,18 +12,15 @@
         <h1>Reserve a Room</h1>
         <div class="datetime" id="datetime"></div>
 
-        <form id="reservation-form">
-            <label for="user-name">Your Name:</label>
-            <input type="text" id="user-name" required>
-            
+        <form id="reserve-form">
+            <label for="username">Your Name:</label>
+            <input type="text" id="username" required>
+
             <label for="room-select">Select Room:</label>
-            <select id="room-select" required></select>
-
-            <label for="course">Course:</label>
-            <input type="text" id="course" required>
-
-            <label for="year-section">Year/Section:</label>
-            <input type="text" id="year-section" required>
+            <select id="room-select" required>
+                <option value="">Choose a room</option>
+                <!-- Room options will be dynamically populated -->
+            </select>
 
             <label for="start-time">Start Time:</label>
             <input type="time" id="start-time" required>
@@ -31,81 +28,20 @@
             <label for="end-time">End Time:</label>
             <input type="time" id="end-time" required>
 
+            <label for="course">Course:</label>
+            <input type="text" id="course" required>
+
+            <label for="year-section">Year/Section:</label>
+            <input type="text" id="year-section" required>
+
             <button type="submit">Reserve Room</button>
         </form>
 
-        <div id="reservation-code" style="display:none;">
-            <h2>Your Reservation Code: <span id="code"></span></h2>
-        </div>
-
-        <button onclick="window.location.href='index.html'">Back to Home</button>
+        <div id="reservation-code" style="margin-top: 20px; font-weight: bold;"></div>
     </div>
 
     <script>
-        // Load available rooms
-        function loadRooms() {
-            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
-            const roomSelect = document.getElementById('room-select');
-
-            rooms.forEach(room => {
-                const option = document.createElement('option');
-                option.value = room;
-                option.textContent = room;
-                roomSelect.appendChild(option);
-            });
-        }
-
-        // Handle reservation form submission
-        document.getElementById('reservation-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const userName = document.getElementById('user-name').value.trim();
-            const roomName = document.getElementById('room-select').value;
-            const course = document.getElementById('course').value.trim();
-            const yearSection = document.getElementById('year-section').value.trim();
-            const startTime = document.getElementById('start-time').value;
-            const endTime = document.getElementById('end-time').value;
-
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
-
-            // Check for overlapping reservations
-            const isReserved = reservations.some(reservation => 
-                reservation.roomName === roomName &&
-                ((startTime >= reservation.startTime && startTime < reservation.endTime) ||
-                (endTime > reservation.startTime && endTime <= reservation.endTime))
-            );
-
-            if (isReserved) {
-                alert('This room is already reserved for the selected time.');
-                return;
-            }
-
-            // Generate a reservation code
-            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase();
-
-            // Save reservation
-            reservations.push({
-                roomName,
-                username: userName,
-                course,
-                yearSection,
-                startTime,
-                endTime,
-                reservationCode
-            });
-            localStorage.setItem('reservations', JSON.stringify(reservations));
-
-            // Show reservation code
-            document.getElementById('code').textContent = reservationCode;
-            document.getElementById('reservation-code').style.display = 'block';
-            this.reset(); // Reset the form after reservation
-        });
-
-        // Load rooms when the page is ready
-        window.onload = function() {
-            loadRooms();
-            const now = new Date();
-            document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
-        };
+        // Add your JavaScript for handling the room reservation logic here
     </script>
 </body>
 </html>
