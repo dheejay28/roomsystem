@@ -10,7 +10,7 @@
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
         <h1>Reserved Rooms</h1>
-        <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
+        <div id="datetime" class="datetime"></div> <!-- Display for Date and Time -->
 
         <table>
             <thead>
@@ -63,10 +63,9 @@
 
         function removeRoom(index) {
             const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
-            // Remove the room at the specified index
-            reservedRooms.splice(index, 1);
+            reservedRooms.splice(index, 1); // Remove the room at the specified index
             localStorage.setItem('reservations', JSON.stringify(reservedRooms)); // Update local storage
-            loadReservedRooms(); // Reload the list
+            loadReservedRooms(); // Reload the list to reflect changes
         }
 
         // Load reserved rooms and date/time when the page is ready
