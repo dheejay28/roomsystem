@@ -72,7 +72,13 @@ button {
     padding: 10px 15px; /* Padding inside the button */
     cursor: pointer; /* Pointer cursor on hover */
     border-radius: 5px; /* Rounded corners */
-    margin-top: 15px; /* Space above buttons */
+    margin: 10px 0; /* Space above and below buttons */
+    width: 100%; /* Full width for buttons */
+}
+
+/* Button Styles for Back to Home */
+button.back {
+    background-color: #ccc; /* Grey color for back button */
 }
 
 button:hover {
