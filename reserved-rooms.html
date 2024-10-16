@@ -33,14 +33,33 @@
             const room = row.children[0].textContent; // Get room name
             const confirmation = confirm(`Are you sure you want to remove ${room}?`); // Confirmation dialog
             if (confirmation) {
+                const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
+                const updatedRooms = reservedRooms.filter(res => res.room !== room); // Remove from the list
+                localStorage.setItem('reservedRooms', JSON.stringify(updatedRooms)); // Update local storage
                 row.remove(); // Remove the row from the table
                 alert(`${room} has been removed successfully.`);
-                // Optionally, add code here to remove the room from your data source or database
             }
         }
 
-        // Optionally, you can add a function here to dynamically load reserved rooms
-        // However, this example starts with an empty table
+        function loadReservedRooms() {
+            const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
+            const tbody = document.getElementById("reserved-rooms");
+            reservedRooms.forEach(room => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${room.room}</td>
+                    <td>${room.startTime}</td>
+                    <td>${room.endTime}</td>
+                    <td>${room.course}</td>
+                    <td>${room.yearSection}</td>
+                    <td><button class="remove-button" onclick="removeRoom(this)">Remove</button></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load reserved rooms when the page is ready
+        window.onload = loadReservedRooms;
     </script>
 </body>
 </html>
