@@ -18,8 +18,7 @@
                     <th>End Time</th>
                     <th>Course</th>
                     <th>Year/Section</th>
-                    <th>Reservation Code</th> <!-- New column for reservation code -->
-                    <th>Action</th>
+                    <th>Reservation Code</th> <!-- Show reservation code -->
                 </tr>
             </thead>
             <tbody id="reserved-rooms">
@@ -29,23 +28,9 @@
     </div>
 
     <script>
-        function removeRoom(button) {
-            const row = button.parentElement.parentElement; // Get the parent row
-            const room = row.children[0].textContent; // Get room name
-            const confirmation = confirm(`Are you sure you want to remove ${room}?`); // Confirmation dialog
-            if (confirmation) {
-                const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
-                const updatedRooms = reservedRooms.filter(res => res.room !== room); // Remove from the list
-                localStorage.setItem('reservedRooms', JSON.stringify(updatedRooms)); // Update local storage
-                row.remove(); // Remove the row from the table
-                alert(`${room} has been removed successfully.`);
-            }
-        }
-
         function loadReservedRooms() {
             const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
             const tbody = document.getElementById("reserved-rooms");
-            const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn') === 'true'; // Check if admin is logged in
 
             reservedRooms.forEach(room => {
                 const row = document.createElement("tr");
@@ -56,7 +41,6 @@
                     <td>${room.course}</td>
                     <td>${room.yearSection}</td>
                     <td>${room.reservationCode}</td> <!-- Display reservation code -->
-                    <td>${isAdminLoggedIn ? '<button class="remove-button" onclick="removeRoom(this)">Remove</button>' : ''}</td>
                 `;
                 tbody.appendChild(row);
             });
