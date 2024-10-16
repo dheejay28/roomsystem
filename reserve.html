@@ -5,20 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reserve Room</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h1>Reserve Room</h1>
         <img src="logo.png" alt="Logo" class="logo">
-        <div id="time-date"></div>
+        <h1>Reserve Room</h1>
         <form id="reservation-form">
-            <label for="room">Select Room:</label>
-            <select id="room" required>
-                <option value="">Select Room</option>
+            <label for="room-select">Select Room:</label>
+            <select id="room-select" required>
                 <option value="Room 101">Room 101</option>
                 <option value="Room 102">Room 102</option>
-                <option value="Room 103">Room 103</option>
+                <!-- Add more room options as needed -->
             </select>
             <label for="start-time">Start Time:</label>
             <input type="time" id="start-time" required>
@@ -28,9 +25,45 @@
             <input type="text" id="course" required>
             <label for="year-section">Year/Section:</label>
             <input type="text" id="year-section" required>
-            <button type="submit" class="button">Reserve</button>
-            <div id="reservation-code"></div>
+            <button type="submit" class="button">Reserve Room</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById('reservation-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const room = document.getElementById('room-select').value;
+            const startTime = document.getElementById('start-time').value;
+            const endTime = document.getElementById('end-time').value;
+            const course = document.getElementById('course').value;
+            const yearSection = document.getElementById('year-section').value;
+            const reservationCode = Math.random().toString(36).substr(2, 8).toUpperCase(); // Generate a simple reservation code
+
+            const reservation = {
+                room,
+                startTime,
+                endTime,
+                course,
+                yearSection,
+                reservationCode
+            };
+
+            // Check if room is already reserved
+            const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
+            const isReserved = reservedRooms.some(res => res.room === room && 
+                ((startTime >= res.startTime && startTime < res.endTime) || 
+                (endTime > res.startTime && endTime <= res.endTime)));
+
+            if (isReserved) {
+                alert('The selected room is already booked during that time.');
+            } else {
+                reservedRooms.push(reservation);
+                localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms));
+                alert('Room reserved successfully! Your reservation code is: ' + reservationCode);
+                // Optionally, redirect to another page or clear the form
+            }
+        });
+    </script>
 </body>
 </html>
