@@ -29,7 +29,7 @@
     </div>
 
     <script>
-        function loadReservedRooms() {
+        function loadAdminReservedRooms() {
             // Retrieve reserved rooms from localStorage
             const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
             const tbody = document.getElementById("admin-reserved-rooms");
@@ -64,11 +64,11 @@
             localStorage.setItem('reservedRooms', JSON.stringify(updatedRooms));
 
             // Reload the reserved rooms table to reflect the changes
-            loadReservedRooms();
+            loadAdminReservedRooms();
         }
 
         // Load reserved rooms when the page is ready
-        window.onload = loadReservedRooms;
+        window.onload = loadAdminReservedRooms;
     </script>
 </body>
 </html>
