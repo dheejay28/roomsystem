@@ -10,47 +10,71 @@
     <div class="container">
         <img src="logo.png" alt="Logo" class="logo">
         <h1>Reserved Rooms</h1>
-        <ul id="reserved-room-list"></ul>
+
+        <div id="datetime" class="datetime"></div> <!-- Date and Time Display -->
+
+        <ul id="reserved-rooms-list"></ul>
+
+        <div id="admin-controls" style="display: none;">
+            <h2>Admin Actions</h2>
+            <p>Only visible to admin users.</p>
+            <button id="remove-room-btn">Remove Selected Room</button>
+        </div>
     </div>
 
     <script>
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: true 
+            };
+            document.getElementById('datetime').textContent = now.toLocaleString('en-US', options);
+        }
+
         function loadReservedRooms() {
-            const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
-            const reservedRoomList = document.getElementById('reserved-room-list');
+            const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
+            const reservedRoomsList = document.getElementById('reserved-rooms-list');
+            reservedRoomsList.innerHTML = ''; // Clear existing list
 
-            // Clear the list before displaying rooms
-            reservedRoomList.innerHTML = '';
-
-            reservedRooms.forEach((reservation, index) => {
+            reservedRooms.forEach((room, index) => {
                 const li = document.createElement('li');
-                li.textContent = `Room: ${reservation.room}, Reserved by: ${reservation.course}, ${reservation.yearSection}, Reservation Code: ${reservation.code}`;
-                
-                // Check if the user is an admin (for demonstration purposes, use a flag here)
-                const isAdmin = localStorage.getItem('isAdmin') === 'true'; // Assume isAdmin is set during login
-                
-                // If the user is an admin, show the remove button
-                if (isAdmin) {
-                    const removeButton = document.createElement('button');
-                    removeButton.textContent = 'Remove';
-                    removeButton.onclick = function() {
-                        removeReservedRoom(index); // Pass the index to the remove function
-                    };
-                    li.appendChild(removeButton); // Append the button to the list item
-                }
-
-                reservedRoomList.appendChild(li); // Append the list item to the list
+                li.textContent = `Room: ${room.roomName}, Course: ${room.course}, Year/Section: ${room.yearSection}, Time: ${room.startTime} - ${room.endTime}, Code: ${room.reservationCode}`;
+                li.setAttribute('data-index', index); // Store index for removing later
+                reservedRoomsList.appendChild(li);
             });
         }
 
-        function removeReservedRoom(index) {
-            const reservedRooms = JSON.parse(localStorage.getItem('reservedRooms')) || [];
-            reservedRooms.splice(index, 1); // Remove the room at the specified index
-            localStorage.setItem('reservedRooms', JSON.stringify(reservedRooms)); // Save the updated list
-            loadReservedRooms(); // Refresh the list
+        // Admin controls logic (assuming admin login is handled)
+        const isAdmin = true; // Set this based on your actual admin login logic
+        if (isAdmin) {
+            document.getElementById('admin-controls').style.display = 'block';
+            document.getElementById('remove-room-btn').addEventListener('click', function() {
+                const selectedRoomIndex = prompt("Enter the index of the room to remove:");
+                const reservedRooms = JSON.parse(localStorage.getItem('reservations')) || [];
+
+                if (selectedRoomIndex !== null && selectedRoomIndex >= 0 && selectedRoomIndex < reservedRooms.length) {
+                    reservedRooms.splice(selectedRoomIndex, 1); // Remove the selected room
+                    localStorage.setItem('reservations', JSON.stringify(reservedRooms)); // Update localStorage
+                    loadReservedRooms(); // Reload the list
+                    alert("Room removed successfully!");
+                } else {
+                    alert("Invalid room index!");
+                }
+            });
         }
 
         // Load reserved rooms when the page is ready
-        window.onload = loadReservedRooms;
+        window.onload = function() {
+            updateDateTime();
+            loadReservedRooms();
+            setInterval(updateDateTime, 1000); // Update every second
+        };
     </script>
 </body>
 </html>
