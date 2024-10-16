@@ -8,6 +8,7 @@
 </head>
 <body>
     <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
         <h1>Admin Login</h1>
         <form id="login-form">
             <label for="username">Username:</label>
@@ -17,5 +18,27 @@
             <button type="submit" class="button">Log In</button>
         </form>
     </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Simulating login credentials (for demonstration purposes)
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Replace these with your actual admin credentials
+            const adminUsername = 'iamtheadmin';
+            const adminPassword = 'Dj*0100010001001010';
+
+            // Check credentials
+            if (username === adminUsername && password === adminPassword) {
+                alert('Login successful!');
+                window.location.href = 'admin.html'; // Redirect to admin page
+            } else {
+                alert('Invalid username or password. Please try again.');
+            }
+        });
+    </script>
 </body>
 </html>
