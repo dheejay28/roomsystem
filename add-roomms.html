@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Rooms</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <img src="logo.png" alt="Logo" class="logo">
+        <h1>Add Room</h1>
+        <form id="add-room-form">
+            <label for="room-name">Room Name:</label>
+            <input type="text" id="room-name" required>
+            <button type="submit" class="button">Add Room</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('add-room-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            const roomName = document.getElementById('room-name').value;
+            alert(`Room ${roomName} added successfully!`);
+            
+            // Here you would typically add logic to save the new room to your reservation system
+            document.getElementById('add-room-form').reset(); // Reset the form
+        });
+    </script>
+</body>
+</html>
