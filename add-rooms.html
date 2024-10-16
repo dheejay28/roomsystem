@@ -32,7 +32,16 @@
             rooms.forEach((room, index) => {
                 const li = document.createElement('li');
                 li.textContent = room;
-                roomList.appendChild(li);
+
+                // Create a remove button
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = function() {
+                    removeRoom(index); // Pass the index to the remove function
+                };
+
+                li.appendChild(removeButton); // Append the button to the list item
+                roomList.appendChild(li); // Append the list item to the list
             });
         }
 
@@ -59,6 +68,13 @@
                 document.getElementById('add-room-form').reset();
             }
         });
+
+        function removeRoom(index) {
+            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+            rooms.splice(index, 1); // Remove the room at the specified index
+            localStorage.setItem('rooms', JSON.stringify(rooms)); // Save the updated list
+            loadRooms(); // Refresh the list
+        }
 
         // Load rooms when the page is ready
         window.onload = loadRooms;
