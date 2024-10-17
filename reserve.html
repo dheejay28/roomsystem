@@ -13,7 +13,7 @@
         <div class="datetime" id="datetime"></div>
 
         <label for="room-name">Select Room:</label>
-        <select id="room-name"></select>
+        <select id="room-name" required></select>
 
         <label for="username">Your Name:</label>
         <input type="text" id="username" required>
@@ -35,20 +35,21 @@
     </div>
 
     <script>
-        function loadRooms() {
-            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
+        async function loadRooms() {
+            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec?action=getRooms');
+            const rooms = await response.json();
             const roomSelect = document.getElementById('room-name');
             roomSelect.innerHTML = ''; // Clear any existing options
 
             rooms.forEach(room => {
                 const option = document.createElement('option');
-                option.value = room; // Value for the selected option
-                option.textContent = room; // Display text for the option
+                option.value = room.roomName; // Assuming roomName is a field in your Google Sheets
+                option.textContent = room.roomName; // Display text for the option
                 roomSelect.appendChild(option); // Add option to the select element
             });
         }
 
-        function reserveRoom() {
+        async function reserveRoom() {
             const username = document.getElementById('username').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
@@ -56,37 +57,64 @@
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
 
-            const reservationCode = generateReservationCode(); // Generate a unique reservation code
+            // Validate that startTime is before endTime
+            if (startTime >= endTime) {
+                alert("End time must be after start time.");
+                return;
+            }
 
-            const reservationData = {
-                roomName: roomName,
-                username: username,
-                course: course,
-                yearSection: yearSection,
-                startTime: startTime,
-                endTime: endTime,
-                reservationCode: reservationCode
-            };
+            // Check for scheduling conflicts
+            const conflict = await checkRoomAvailability(roomName, startTime, endTime);
+            if (conflict) {
+                alert("This room is already reserved for the selected time. Please choose another time.");
+                return;
+            }
 
-            fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec', {
+            const reservationCode = generateReservationCode(); // Generate reservation code
+
+            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(reservationData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === 'Room reserved successfully') {
-                    alert(data.message + ` Your reservation code is: ${reservationCode}`);
-                } else {
-                    alert(data.message); // Show error message if room is not available
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Failed to reserve room. Please try again.');
+                body: JSON.stringify({
+                    action: 'reserveRoom',
+                    roomName,
+                    username,
+                    course,
+                    yearSection,
+                    startTime,
+                    endTime,
+                    reservationCode,
+                }),
             });
+
+            const result = await response.json();
+            if (result.success) {
+                alert(`Room reserved successfully! Reservation Code: ${reservationCode}`);
+            } else {
+                alert("Failed to reserve the room. Please try again.");
+            }
+        }
+
+        async function checkRoomAvailability(roomName, startTime, endTime) {
+            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec?action=getReservations');
+            const reservations = await response.json();
+
+            for (const reservation of reservations) {
+                if (reservation.roomName === roomName) {
+                    const reservedStartTime = reservation.startTime;
+                    const reservedEndTime = reservation.endTime;
+
+                    // Check for overlap
+                    if ((startTime >= reservedStartTime && startTime < reservedEndTime) || 
+                        (endTime > reservedStartTime && endTime <= reservedEndTime) ||
+                        (startTime <= reservedStartTime && endTime >= reservedEndTime)) {
+                        return true; // Conflict exists
+                    }
+                }
+            }
+            return false; // No conflict
         }
 
         function generateReservationCode() {
