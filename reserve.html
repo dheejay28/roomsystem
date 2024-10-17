@@ -13,11 +13,7 @@
         <div class="datetime" id="datetime"></div>
 
         <label for="room-name">Select Room:</label>
-        <select id="room-name">
-            <option value="Room 101">Room 101</option>
-            <option value="Room 102">Room 102</option>
-            <option value="Room 103">Room 103</option>
-        </select>
+        <select id="room-name"></select>
 
         <label for="username">Your Name:</label>
         <input type="text" id="username" required>
@@ -28,29 +24,51 @@
         <label for="year-section">Year/Section:</label>
         <input type="text" id="year-section" required>
 
-        <label for="start-time">Start Time:</label>
+        <label for="start-time">Start Time (HH:MM):</label>
         <input type="time" id="start-time" required>
 
-        <label for="end-time">End Time:</label>
+        <label for="end-time">End Time (HH:MM):</label>
         <input type="time" id="end-time" required>
 
         <button onclick="reserveRoom()">Reserve Room</button>
         <button onclick="window.location.href='index.html'">Back to Home</button>
+
+        <div id="reservation-code" style="display:none; margin-top:20px;">
+            <h3>Your Reservation Code: <span id="reservationCodeDisplay"></span></h3>
+        </div>
     </div>
 
     <script>
         const apiUrl = 'https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec';
 
+        // Function to load rooms added by the admin
+        function loadRooms() {
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const roomSelect = document.getElementById('room-name');
+                    roomSelect.innerHTML = ''; // Clear previous options
+
+                    data.forEach(room => {
+                        const option = document.createElement('option');
+                        option.value = room.roomName; // Assign value to option
+                        option.textContent = room.roomName; // Display room name in dropdown
+                        roomSelect.appendChild(option); // Append option to dropdown
+                    });
+                })
+                .catch(error => console.error('Error loading rooms:', error));
+        }
+
+        // Function to reserve a room and generate a reservation code
         function reserveRoom() {
-            const roomName = document.getElementById('room-name').value;
             const username = document.getElementById('username').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
+            const roomName = document.getElementById('room-name').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
 
-            const reservationCode = generateReservationCode();
-
+            const reservationCode = generateReservationCode(); // Generate unique reservation code
             const reservationData = {
                 roomName,
                 username,
@@ -63,27 +81,33 @@
 
             fetch(apiUrl, {
                 method: 'POST',
-                body: JSON.stringify(reservationData),
                 headers: {
-                    'Content-Type': 'application/json',
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reservationData)
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message === 'Room not available') {
+                if (data.message === 'Room reserved successfully') {
+                    // Show the reservation code after successful reservation
+                    document.getElementById('reservationCodeDisplay').textContent = reservationCode;
+                    document.getElementById('reservation-code').style.display = 'block';
+                    alert('Room reserved successfully!');
+                } else if (data.message === 'Room not available') {
                     alert('Room is not available at the selected time.');
-                } else {
-                    alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`);
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error reserving room:', error));
         }
 
+        // Simple random code generator for reservation code
         function generateReservationCode() {
-            return Math.random().toString(36).substr(2, 9).toUpperCase();
+            return Math.random().toString(36).substr(2, 9); 
         }
 
+        // Load rooms when the page loads
         window.onload = function() {
+            loadRooms();
             const now = new Date();
             document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
         };
