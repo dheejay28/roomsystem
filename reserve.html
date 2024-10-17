@@ -13,7 +13,11 @@
         <div class="datetime" id="datetime"></div>
 
         <label for="room-name">Select Room:</label>
-        <select id="room-name"></select>
+        <select id="room-name">
+            <option value="Room 101">Room 101</option>
+            <option value="Room 102">Room 102</option>
+            <option value="Room 103">Room 103</option>
+        </select>
 
         <label for="username">Your Name:</label>
         <input type="text" id="username" required>
@@ -35,66 +39,51 @@
     </div>
 
     <script>
-        function loadRooms() {
-            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
-            const roomSelect = document.getElementById('room-name');
-            roomSelect.innerHTML = ''; // Clear any existing options
-
-            rooms.forEach(room => {
-                const option = document.createElement('option');
-                option.value = room; // Value for the selected option
-                option.textContent = room; // Display text for the option
-                roomSelect.appendChild(option); // Add option to the select element
-            });
-        }
+        const apiUrl = 'https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec';
 
         function reserveRoom() {
+            const roomName = document.getElementById('room-name').value;
             const username = document.getElementById('username').value;
             const course = document.getElementById('course').value;
             const yearSection = document.getElementById('year-section').value;
-            const roomName = document.getElementById('room-name').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
 
-            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+            const reservationCode = generateReservationCode();
 
-            // Check for overlapping reservations
-            const isConflict = reservations.some(reservation => {
-                return (
-                    reservation.roomName === roomName &&
-                    ((startTime >= reservation.startTime && startTime < reservation.endTime) ||
-                    (endTime > reservation.startTime && endTime <= reservation.endTime) ||
-                    (startTime <= reservation.startTime && endTime >= reservation.endTime))
-                );
-            });
-
-            if (isConflict) {
-                alert('The selected room is not available at this time. Please choose a different time.');
-                return; // Exit the function if there is a conflict
-            }
-
-            const reservationCode = generateReservationCode(); // Generate the reservation code
-
-            reservations.push({
+            const reservationData = {
                 roomName,
                 username,
                 course,
                 yearSection,
-                startTime, // Store as HH:MM
-                endTime,   // Store as HH:MM
+                startTime,
+                endTime,
                 reservationCode
-            });
+            };
 
-            localStorage.setItem('reservations', JSON.stringify(reservations)); // Save reservations
-            alert('Room reserved successfully! Your reservation code is: ' + reservationCode);
+            fetch(apiUrl, {
+                method: 'POST',
+                body: JSON.stringify(reservationData),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Room not available') {
+                    alert('Room is not available at the selected time.');
+                } else {
+                    alert(`Room reserved successfully! Your reservation code is: ${reservationCode}`);
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
 
         function generateReservationCode() {
-            return Math.random().toString(36).substr(2, 9); // Simple random code generator
+            return Math.random().toString(36).substr(2, 9).toUpperCase();
         }
 
         window.onload = function() {
-            loadRooms(); // Load rooms when the page loads
             const now = new Date();
             document.getElementById('datetime').textContent = `Current Time: ${now.toLocaleString()}`;
         };
