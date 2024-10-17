@@ -49,77 +49,7 @@
             });
         }
 
-        async function reserveRoom() {
-            const username = document.getElementById('username').value;
-            const course = document.getElementById('course').value;
-            const yearSection = document.getElementById('year-section').value;
-            const roomName = document.getElementById('room-name').value;
-            const startTime = document.getElementById('start-time').value;
-            const endTime = document.getElementById('end-time').value;
-
-            // Validate that startTime is before endTime
-            if (startTime >= endTime) {
-                alert("End time must be after start time.");
-                return;
-            }
-
-            // Check for scheduling conflicts
-            const conflict = await checkRoomAvailability(roomName, startTime, endTime);
-            if (conflict) {
-                alert("This room is already reserved for the selected time. Please choose another time.");
-                return;
-            }
-
-            const reservationCode = generateReservationCode(); // Generate reservation code
-
-            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'reserveRoom',
-                    roomName,
-                    username,
-                    course,
-                    yearSection,
-                    startTime,
-                    endTime,
-                    reservationCode,
-                }),
-            });
-
-            const result = await response.json();
-            if (result.success) {
-                alert(`Room reserved successfully! Reservation Code: ${reservationCode}`);
-            } else {
-                alert("Failed to reserve the room. Please try again.");
-            }
-        }
-
-        async function checkRoomAvailability(roomName, startTime, endTime) {
-            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec?action=getReservations');
-            const reservations = await response.json();
-
-            for (const reservation of reservations) {
-                if (reservation.roomName === roomName) {
-                    const reservedStartTime = reservation.startTime;
-                    const reservedEndTime = reservation.endTime;
-
-                    // Check for overlap
-                    if ((startTime >= reservedStartTime && startTime < reservedEndTime) || 
-                        (endTime > reservedStartTime && endTime <= reservedEndTime) ||
-                        (startTime <= reservedStartTime && endTime >= reservedEndTime)) {
-                        return true; // Conflict exists
-                    }
-                }
-            }
-            return false; // No conflict
-        }
-
-        function generateReservationCode() {
-            return Math.random().toString(36).substr(2, 9); // Simple random code generator
-        }
+        // ... (rest of your existing script)
 
         window.onload = function() {
             loadRooms(); // Load rooms when the page loads
