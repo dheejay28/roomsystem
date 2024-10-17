@@ -38,7 +38,7 @@
         function loadRooms() {
             const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
             const roomSelect = document.getElementById('room-name');
-            roomSelect.innerHTML = ''; // Clear any existing options
+            roomSelect.innerHTML = ''; // Clear existing options
 
             rooms.forEach(room => {
                 const option = document.createElement('option');
@@ -86,8 +86,8 @@
                 username,
                 course,
                 yearSection,
-                startTime, // Store as HH:MM
-                endTime,   // Store as HH:MM
+                startTime,
+                endTime,
                 reservationCode
             });
 
