@@ -49,12 +49,18 @@
         }
 
         function reserveRoom() {
-            const username = document.getElementById('username').value;
-            const course = document.getElementById('course').value;
-            const yearSection = document.getElementById('year-section').value;
+            const username = document.getElementById('username').value.trim();
+            const course = document.getElementById('course').value.trim();
+            const yearSection = document.getElementById('year-section').value.trim();
             const roomName = document.getElementById('room-name').value;
             const startTime = document.getElementById('start-time').value;
             const endTime = document.getElementById('end-time').value;
+
+            // Check for empty fields
+            if (!username || !course || !yearSection || !roomName || !startTime || !endTime) {
+                alert("Please fill in all fields.");
+                return; // Exit the function if any field is empty
+            }
 
             const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
 
