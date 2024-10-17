@@ -13,7 +13,7 @@
         <div class="datetime" id="datetime"></div>
 
         <label for="room-name">Select Room:</label>
-        <select id="room-name" required></select>
+        <select id="room-name"></select>
 
         <label for="username">Your Name:</label>
         <input type="text" id="username" required>
@@ -35,21 +35,63 @@
     </div>
 
     <script>
-        async function loadRooms() {
-            const response = await fetch('https://script.google.com/macros/s/AKfycby2m7gztzQEymMpbhBRlpC_MN1S9uk5Casf3QGyDTSQhxbviwec63enPcngitHmvAyOgQ/exec?action=getRooms');
-            const rooms = await response.json();
+        function loadRooms() {
+            const rooms = JSON.parse(localStorage.getItem('rooms')) || [];
             const roomSelect = document.getElementById('room-name');
             roomSelect.innerHTML = ''; // Clear any existing options
 
             rooms.forEach(room => {
                 const option = document.createElement('option');
-                option.value = room.roomName; // Assuming roomName is a field in your Google Sheets
-                option.textContent = room.roomName; // Display text for the option
+                option.value = room; // Value for the selected option
+                option.textContent = room; // Display text for the option
                 roomSelect.appendChild(option); // Add option to the select element
             });
         }
 
-        // ... (rest of your existing script)
+        function reserveRoom() {
+            const username = document.getElementById('username').value;
+            const course = document.getElementById('course').value;
+            const yearSection = document.getElementById('year-section').value;
+            const roomName = document.getElementById('room-name').value;
+            const startTime = document.getElementById('start-time').value;
+            const endTime = document.getElementById('end-time').value;
+
+            const reservations = JSON.parse(localStorage.getItem('reservations')) || [];
+
+            // Check for overlapping reservations
+            const isConflict = reservations.some(reservation => {
+                return (
+                    reservation.roomName === roomName &&
+                    ((startTime >= reservation.startTime && startTime < reservation.endTime) ||
+                    (endTime > reservation.startTime && endTime <= reservation.endTime) ||
+                    (startTime <= reservation.startTime && endTime >= reservation.endTime))
+                );
+            });
+
+            if (isConflict) {
+                alert('The selected room is not available at this time. Please choose a different time.');
+                return; // Exit the function if there is a conflict
+            }
+
+            const reservationCode = generateReservationCode(); // Generate the reservation code
+
+            reservations.push({
+                roomName,
+                username,
+                course,
+                yearSection,
+                startTime, // Store as HH:MM
+                endTime,   // Store as HH:MM
+                reservationCode
+            });
+
+            localStorage.setItem('reservations', JSON.stringify(reservations)); // Save reservations
+            alert('Room reserved successfully! Your reservation code is: ' + reservationCode);
+        }
+
+        function generateReservationCode() {
+            return Math.random().toString(36).substr(2, 9); // Simple random code generator
+        }
 
         window.onload = function() {
             loadRooms(); // Load rooms when the page loads
